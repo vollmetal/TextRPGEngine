@@ -1,7 +1,6 @@
-import src
-from src.scene_branch import Scene
-from src import eng_globals
-from src import menu_functions
+from ..utils.game_classes.world_functions.scene_branch import Scene
+from ..utils import engine_globals
+from ..utils import menu_functions
 
 class Module:
     name: str
@@ -26,11 +25,11 @@ class Module:
             self.scenes[scene_name] = scene
 
     def run (self) :
-        eng_globals.engine_state = self.initial_scene.name
-        while (eng_globals.engine_state != eng_globals.STATE_ENUMS[0] and
-                eng_globals.engine_state != eng_globals.STATE_ENUMS[3]) :
-            if eng_globals.engine_state == self.initial_scene.name:
+        engine_globals.engine_state = self.initial_scene.name
+        while (engine_globals.engine_state != engine_globals.STATE_ENUMS[0] and
+                engine_globals.engine_state != engine_globals.STATE_ENUMS[3]) :
+            if engine_globals.engine_state == self.initial_scene.name:
                 self.initial_scene.display()
             for scene_name, scene_data in self.scenes.items():
-                if eng_globals.engine_state == scene_name:
+                if engine_globals.engine_state == scene_name:
                     scene_data.display()

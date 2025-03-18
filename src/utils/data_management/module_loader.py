@@ -1,7 +1,7 @@
 import json
-from src import eng_globals
-from src import scene_branch
-from src import module
+from ... import utils
+from ...utils import engine_globals, game_classes
+from ...module_utils import module
 
 from os import listdir
 from os import walk
@@ -35,7 +35,7 @@ def LoadFile(file_path, file) :
         data = json.load(selected_file)
         new_module = module.Module(data[MODULE_NAME])
         for module_scene in data[MODULE_SCENE_OBJECT].values() :
-            new_scene = scene_branch.Scene(module_scene[SCENE_NAME], module_scene[SCENE_DESCRIPTION])
+            new_scene = utils.game_classes.world_functions.scene_branch.Scene(module_scene[SCENE_NAME], module_scene[SCENE_DESCRIPTION])
             new_scene.add_user_input(module_scene[SCENE_USER_INPUTS])
             if module_scene["start_scene"]:
                 new_module.add_scenes(new_scene.name, new_scene, True)

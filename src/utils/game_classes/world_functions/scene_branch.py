@@ -1,5 +1,4 @@
-from src import eng_globals
-
+from .... import utils
 
 class Scene:
     name: str
@@ -40,13 +39,13 @@ class Scene:
 
     def display (self) :
         """main display thread"""
-        print(eng_globals.LINE_SEPERATOR_SMALL 
+        print(utils.engine_globals.LINE_SEPERATOR_SMALL 
               + self.name 
-              + eng_globals.LINE_SEPERATOR_SMALL)
+              + utils.engine_globals.LINE_SEPERATOR_SMALL)
         print(self.description)
-        print(eng_globals.LINE_SEPERATOR_SMALL 
+        print(utils.engine_globals.LINE_SEPERATOR_SMALL 
               + "Inputs" 
-              + eng_globals.LINE_SEPERATOR_SMALL)
+              + utils.engine_globals.LINE_SEPERATOR_SMALL)
         for key, action in self.user_inputs.items():
             print(key 
                   + ": " 
@@ -59,8 +58,8 @@ class Scene:
 
     def scene_transfer (self, value):
         """changes the displayed scene to the value"""
-        eng_globals.engine_state = value
+        utils.engine_globals.engine_state = value
 
     def exit_game (self, value):
         """exits to main menu"""
-        eng_globals.engine_state = eng_globals.STATE_ENUMS[0]
+        utils.engine_globals.engine_state = utils.engine_globals.STATE_ENUMS[0]

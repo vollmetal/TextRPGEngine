@@ -1,6 +1,6 @@
-from src import eng_globals
-from src import module_loader
-from src import menu_functions
+from src.utils import engine_globals, menu_functions
+from src.utils.data_management import module_loader
+from src.utils import data_management
 
 MAIN_MENU_OPTIONS = {
     "1": menu_functions.new_game_menu,
@@ -11,39 +11,39 @@ MAIN_MENU_OPTIONS = {
 def MainThread  ():
     """Main state handling function. Handles all code."""
 
-    eng_globals.init()
+    engine_globals.init()
 
-    eng_globals.engine_state = eng_globals.STATE_ENUMS[0]
+    engine_globals.engine_state = engine_globals.STATE_ENUMS[0]
     print("Welcome to " 
-          + eng_globals.PROGRAM_NAME + ".")
+          + engine_globals.PROGRAM_NAME + ".")
     print("Created by: " 
-          + eng_globals.CREATOR_NAME)
-    while eng_globals.engine_state != eng_globals.STATE_ENUMS[3]:
-        if eng_globals.engine_state == eng_globals.STATE_ENUMS[0]: # Main menu
-            print(eng_globals.LINE_SEPERATOR_SMALL 
+          + engine_globals.CREATOR_NAME)
+    while engine_globals.engine_state != engine_globals.STATE_ENUMS[3]:
+        if engine_globals.engine_state == engine_globals.STATE_ENUMS[0]: # Main menu
+            print(engine_globals.LINE_SEPERATOR_SMALL 
                   + "MAIN MENU" 
-                  + eng_globals.LINE_SEPERATOR_SMALL)
+                  + engine_globals.LINE_SEPERATOR_SMALL)
             print("1: New Game")
             print("2: Options")
             print("3: Exit")
-            print(eng_globals.LINE_SEPERATOR_LARGE)
+            print(engine_globals.LINE_SEPERATOR_LARGE)
             output = menu_functions.MenuSelection(
                 "To input a selection, enter the number associated with it:",
                 MAIN_MENU_OPTIONS,
                 )
-            if output == eng_globals.SELECTION_DEBUG[1]:
+            if output == engine_globals.SELECTION_DEBUG[1]:
                 print("Please enter a valid option.")
             
-        if eng_globals.engine_state == eng_globals.STATE_ENUMS[1]: # New game menu
+        if engine_globals.engine_state == engine_globals.STATE_ENUMS[1]: # New game menu
             modules = []
             menu_items = {}
             menu_item_modules = {}
 
-            for file in module_loader.GetFiles(eng_globals.MODULE_LOADER_PATH) :
-                modules.append(module_loader.LoadFile(eng_globals.MODULE_LOADER_PATH, file))
-            print(eng_globals.LINE_SEPERATOR_SMALL 
-                  + eng_globals.STATE_ENUMS[1] 
-                  + eng_globals.LINE_SEPERATOR_SMALL)
+            for file in module_loader.GetFiles(engine_globals.MODULE_LOADER_PATH) :
+                modules.append(module_loader.LoadFile(engine_globals.MODULE_LOADER_PATH, file))
+            print(engine_globals.LINE_SEPERATOR_SMALL 
+                  + engine_globals.STATE_ENUMS[1] 
+                  + engine_globals.LINE_SEPERATOR_SMALL)
             module_index = 0
             for module in modules:
                 print(str(module_index + 1) 
@@ -59,11 +59,15 @@ def MainThread  ():
                 menu_items,
                 {"", ""}
             )
-        if eng_globals.engine_state == eng_globals.STATE_ENUMS[2]: # Options menu
-            print(eng_globals.LINE_SEPERATOR_SMALL 
-                  + eng_globals.STATE_ENUMS[2] 
-                  + eng_globals.LINE_SEPERATOR_SMALL)
-            eng_globals.engine_state = eng_globals.STATE_ENUMS[3]
+        if engine_globals.engine_state == engine_globals.STATE_ENUMS[2]: # Options menu
+            print(engine_globals.LINE_SEPERATOR_SMALL 
+                  + engine_globals.STATE_ENUMS[2] 
+                  + engine_globals.LINE_SEPERATOR_SMALL)
+            new_world_name = input("Please enter the name of the new module: ")
+            new_module_serializer = data_management.create_item_file.module_serializer(engine_globals.MODULE_STRUCTURE_PATH)
+            new_module_serializer.serialize_module(new_world_name, engine_globals.MODULE_LOADER_PATH)
+            engine_globals.engine_state = engine_globals.STATE_ENUMS[0]
+
     print("Exiting...")
     print("Goodbye")
 

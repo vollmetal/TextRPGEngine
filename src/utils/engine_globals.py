@@ -1,8 +1,8 @@
-from src import scene_branch
+from .. import utils
 
 STATE_ENUMS = ["Startup",
             "New Game Menu",
-            "Option Menu",
+            "Create World",
             "Exit"]
 
 
@@ -16,10 +16,18 @@ SELECTION_DEBUG = [
 ]
 
 CLASS_TYPES = {
-    "Scene": scene_branch.Scene
+    "Scene": utils.game_classes.world_functions.scene_branch.Scene,
+    "Item" : ""
 }
 
 MODULE_LOADER_PATH = "./modules"
+
+MODULE_STRUCTURE_PATH = {
+    "Items": "/items",
+    "Worlds": "/worlds",
+    "Entities": "/entities",
+    "Crafting Recipes": "/crafting_recipes"
+}
 
 engine_state: str
 
