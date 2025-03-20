@@ -1,11 +1,13 @@
+from ..utils.game_classes.item import Item
 from ..utils.game_classes.world_functions.scene_branch import Scene
 from ..utils import engine_globals
-from ..utils import menu_functions
 
 class Module:
     name: str
 
     scenes: dict[str : Scene]
+
+    items: dict[str: Item]
 
     initial_scene: Scene
 
@@ -14,15 +16,10 @@ class Module:
     def __init__ (self, name: str) :
         self.name = name
         self.scenes = {}
+        self.items = {}
         self.initial_scene = Scene
         self.current_scene = ""
 
-    def add_scenes (self, scene_name : str, scene : Scene, initial_scene: bool) :
-        if initial_scene:
-            self.initial_scene = scene
-            self.current_scene = scene.name
-        else:
-            self.scenes[scene_name] = scene
 
     def run (self) :
         engine_globals.engine_state = self.initial_scene.name

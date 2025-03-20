@@ -1,11 +1,18 @@
-from .... import utils
+from ...engine_classes import Vector3D
+from .cell import Cell
 
 
-class World:
+class Worldspace:
 
-    size = {str, int}
+    name: str
 
-    locations: {int, int}
+    size = dict[str, int]
 
-    def __init__(self, height: int, width: int):
-        self.size = {"x": height, "y": width}
+    cells: dict[Vector3D, Cell]
+
+    def __init__(self, name: str, length: int = 1, width: int = 1, height: int = 1, cells: dict[Vector3D, Cell] = {}):
+        self.name = name
+        self.size = {"x": length, "y": width, "z": height}
+        self.cells = cells
+
+    

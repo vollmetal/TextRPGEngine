@@ -1,0 +1,7 @@
+{
+    "name": "hello world",
+    "Items": "/items",
+    "Worlds": "/worlds",
+    "Entities": "/entities",
+    "Crafting Recipes": "/crafting_recipes"
+}

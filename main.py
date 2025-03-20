@@ -1,5 +1,6 @@
+from src.module_utils import module_editor, module_loader
+from src.module_utils.module_editor import ModuleCreator
 from src.utils import engine_globals, menu_functions
-from src.utils.data_management import module_loader
 from src.utils import data_management
 
 MAIN_MENU_OPTIONS = {
@@ -8,8 +9,12 @@ MAIN_MENU_OPTIONS = {
     "3": menu_functions.main_menu_exit,
     }
 
+module_editor_class : ModuleCreator
+
 def MainThread  ():
     """Main state handling function. Handles all code."""
+
+    module_editor_class = module_editor.new_module_editor()
 
     engine_globals.init()
 
@@ -60,15 +65,11 @@ def MainThread  ():
                 {"", ""}
             )
         if engine_globals.engine_state == engine_globals.STATE_ENUMS[2]: # Options menu
-            print(engine_globals.LINE_SEPERATOR_SMALL 
-                  + engine_globals.STATE_ENUMS[2] 
-                  + engine_globals.LINE_SEPERATOR_SMALL)
-            new_world_name = input("Please enter the name of the new module: ")
-            new_module_serializer = data_management.create_item_file.module_serializer(engine_globals.MODULE_STRUCTURE_PATH)
-            new_module_serializer.serialize_module(new_world_name, engine_globals.MODULE_LOADER_PATH)
-            engine_globals.engine_state = engine_globals.STATE_ENUMS[0]
+            module_editor_class.module_editor()
 
     print("Exiting...")
     print("Goodbye")
+
+
 
 MainThread ()

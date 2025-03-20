@@ -10,18 +10,10 @@ class Vector2D:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-
-    def get_x(self):
-        return self.x
-    
-    def get_y(self):
-        return self.y
-    
-    def set_x(self, new_x):
-        self.x = new_x
-
-    def set_y(self, new_y):
-        self.y = new_y
+        
+    def __str__(self):
+        return (f"""Vector2D: x: {self.x},
+          y: {self.y}""")
 
 
 class Vector3D:
@@ -37,20 +29,7 @@ class Vector3D:
         self.y = y
         self.z = z
 
-    def get_x(self):
-        return self.x
-    
-    def get_y(self):
-        return self.y
-    
-    def get_z(self):
-        return self.z
-    
-    def set_x(self, new_x):
-        self.x = new_x
-
-    def set_y(self, new_y):
-        self.y = new_y
-
-    def set_z(self, new_z):
-        self.z = new_z
+    def __str__(self):
+        return (f"""Vector3D: x: {self.x},
+                y: {self.y}, 
+                z: {self.z}""")
