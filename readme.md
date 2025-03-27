@@ -1,6 +1,9 @@
-# Text RPG Engine
+# Gaia Game Engine
 
-An engine that runs json files as modules for a text RPG
+An engine that runs json files as modules for video games
+
+# Goal
+This engine will load up specific files as json files to make a modular text or early graphical video game in python, using a module structure. This way users could easily make new games for players just by editing or creating new json files or using the built in editor to build up and edit such files.
 
 # LICENSE
 
