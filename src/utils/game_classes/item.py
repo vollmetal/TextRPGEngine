@@ -25,9 +25,7 @@ class Item:
 
     crafting_recipes: {str}
 
-    use_functions: {str}
-
-    def __init__ (self, name: str, size: engine_classes.Vector3D, weight: int, value: int, icon: str, category: str, keywords: list[str], crafting_recipes: {str}, use_functions: {str}) :
+    def __init__ (self, name: str, size: engine_classes.Vector3D, weight: int, value: int, icon: str, category: str, keywords: list[str], crafting_recipes: {str}) :
         self.name = name
         self.size = size
         self.weight = weight
@@ -36,53 +34,24 @@ class Item:
         self.category = category
         self.keywords = keywords
         self.crafting_recipes = crafting_recipes
-        self.use_functions = use_functions
-    
-    
-    def get_name(self) -> str:
-        return self.name
-    
-    # size functions
-    def get_size (self) -> engine_classes.Vector3D:
-        return self.size
-    
-    def set_size (self, size: engine_classes.Vector3D):
-        self.size = size
-    
-    # weight functions
-    def get_weight (self) -> int:
-        return self.weight
-    
-    def set_weight (self, weight: int):
-        self.weight = weight
-    
-    # value functions
-    def get_value (self) -> int:
-        return self.value
-    
-    def set_value (self, value: int):
-        self.value = value
-    
-    # icon functions
-    def get_icon (self) -> str:
-        return self.icon
-    
-    def set_icon (self, icon: str):
-        self.icon = icon
 
-    # category functions
-    def get_category(self) -> str:
-        return self.category
+    def __str__(self):
+        return f'{self.name}\nsize:(width: {self.size.x}, height: {self.size.y}, length: {self.size.z})\nweight: {self.weight}\nvalue: {self.value}\nsorted into category: {self.category}\ncontains keywords: {self.keywords}'
     
-    def set_category (self, category: str):
-        self.category = category
+    def serialize(self) -> dict[str]:
+        serialized_output = {}
+        serialized_output['name'] = self.name
+        serialized_output['size'] = self.size
+        serialized_output['weight'] = self.size
+        serialized_output['value'] = self.value
+        serialized_output['icon'] = self.icon
+        serialized_output['category'] = self.category
+        serialized_output['keywords'] = self.keywords
+        serialized_output['crafting_recipes'] = self.crafting_recipes
 
+    
+    
     # keyword functions
-    def get_keywords (self) -> list[str]:
-        return self.keywords
-
-    def set_keywords (self, keywords: list[str]):
-        self.keywords = keywords
 
     def add_keyword (self, keyword: str):
         """appends a keyword to the end of the list of keywords"""
@@ -96,13 +65,6 @@ class Item:
             print("ERROR KEYWORD NOT FOUND")
 
     # crafting recipe functions
-    def get_crafting_recipes (self) -> {str}:
-        """returns a dictionary of registered crafting recipes"""
-        return self.crafting_recipes
-
-    def set_crafting_recipes (self, crafting_recipes: {str}):
-        """sets the crafting recipes for the item to the input dictionary"""
-        self.crafting_recipes = crafting_recipes
 
     def add_crafting_recipe(self, id:str, crafting_recipe):
         """adds a single crafting recipe with the id string as a key"""
@@ -114,7 +76,3 @@ class Item:
             del self.crafting_recipes[id]
         except:
             print("ERROR RECIPE NOT FOUND")
-
-    def use_item(self, id: str, *args):
-        """uses any one of the functions registered with the item denoted by the input id. Args is a tuple of any inputs the function may require."""
-        self.use_functions[id](args)

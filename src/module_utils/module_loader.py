@@ -1,4 +1,5 @@
 import json
+import os
 
 from ..utils.game_classes.world_functions.scene_branch import Scene
 from ..utils.engine_classes import Vector3D
@@ -10,7 +11,7 @@ from os import listdir
 from os import walk
 
 # JSON format strings for the module itself.
-MODULE_NAME = "moduleName"
+MODULE_NAME = "name"
 MODULE_TYPES = ('items',
                 'scenes')
 
@@ -24,21 +25,21 @@ def GetFiles(path) :
     """ Returns all files at the given path. """
     temp_file_list = []
     for (dirpath, dirnames, filenames) in walk(path):
-        temp_file_list.extend(filenames)
+        temp_file_list.append(filenames)
     return temp_file_list
 
 def LoadModule(folder_path, module_name = ""):
     """Loads a module from it's folder"""
     loaded_module: Module
-    with open(folder_path + '/' + module_name, 'r') as meta_file:
+    with open(f"{folder_path}/{module_name}", 'r') as meta_file:
         data = json.load(meta_file)
         loaded_module = Module(data[MODULE_NAME])
-        item_file_list = GetFiles(f'{folder_path}/{module_name}/{MODULE_TYPES[0]}')
-        scene_file_list = GetFiles(f'{folder_path}/{module_name}/{MODULE_TYPES[1]}')
+        item_file_list = GetFiles(f'{folder_path}/{loaded_module.name}/{MODULE_TYPES[0]}')
+        scene_file_list = GetFiles(f'{folder_path}/{loaded_module.name}/{MODULE_TYPES[1]}')
         # load items
-        for item in item_file_list:
-            with open(f'{folder_path}/{module_name}/{MODULE_TYPES[0]}/{item}') as item_file:
-                item_data = item_file
+        for item in item_file_list[0]:
+            with open(f'{folder_path}/{loaded_module.name}/{MODULE_TYPES[0]}/{item}', 'r') as item_file:
+                item_data = json.load(item_file)
                 size = Vector3D(item_data['size']['x'], item_data['size']['y'], item_data['size']['z'])
                 new_item = Item(
                     item_data['name'],
@@ -64,10 +65,10 @@ def LoadModule(folder_path, module_name = ""):
         
 def LoadModulesInDirectory(folder_path):
     loaded_modules = []
-    for (dirpath, dirnames, filenames) in walk(folder_path):
-        module_folder = dirpath
-        for (dirpath, dirnames, filenames) in walk(f'{folder_path}/{module_folder}'):
-            for file in filenames:
-                loaded_module = LoadModule(dirpath, filenames)
-                loaded_modules.append(loaded_module)
+    loaded_module_names: list[str] = []
+    module_paths = os.listdir(folder_path)
+    print(module_paths)
+    for path in module_paths:
+        loaded_modules.append(LoadModule(folder_path, f'{path}/{path}.module'))
+    
     return loaded_modules

@@ -1,19 +1,20 @@
 from .. import utils
 
-STATE_ENUMS = ["Startup",
+STATE_ENUMS = ("Startup",
             "New Game Menu",
             "Create World",
-            "Exit"]
+            "Exit")
 
 
 
 PROGRAM_NAME = "RPGEngine"
 CREATOR_NAME = "Sarah A"
 
-SELECTION_DEBUG = [
+SELECTION_DEBUG = (
     "VALID ENTRY",
     "INVALID ENTRY",
-]
+    )
+
 
 CLASS_TYPES = {
     "Scene": utils.game_classes.world_functions.scene_branch.Scene,
@@ -23,10 +24,10 @@ CLASS_TYPES = {
 MODULE_LOADER_PATH = "./modules"
 
 MODULE_STRUCTURE_PATH = {
-    "Items": "/items",
-    "Worlds": "/worlds",
-    "Entities": "/entities",
-    "Crafting Recipes": "/crafting_recipes"
+    "items": "/Items",
+    "worlds": "/wWorlds",
+    "entities": "/Entities",
+    "crafting_recipes": "/Crafting Recipes"
 }
 
 engine_state: str

@@ -3,22 +3,16 @@ from ..utils.game_classes.world_functions.scene_branch import Scene
 from ..utils import engine_globals
 
 class Module:
-    name: str
-
-    scenes: dict[str : Scene]
-
-    items: dict[str: Item]
-
-    initial_scene: Scene
-
-    current_scene: str
 
     def __init__ (self, name: str) :
         self.name = name
-        self.scenes = {}
-        self.items = {}
+        self.scenes: dict[str, Scene] = {}
+        self.items: dict[str, Item] = {}
         self.initial_scene = Scene
         self.current_scene = ""
+
+    def __str__(self):
+        return f"Module name: {self.name}\n scenes: {self.scenes}\n items: {self.items}\n initial scene: {self.initial_scene}\n current scene: {self.current_scene} "
 
 
     def run (self) :

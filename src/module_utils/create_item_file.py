@@ -12,21 +12,11 @@ class module_serializer:
         self.module_object_paths = module_path_structure
 
     def serialize_item(self, item: Item, path: str):
-        item_holder = {}
-        item_holder["name"] = item.name
-        item_holder["size"] = {"x": item.size.x, 
-                            "y": item.size.y, 
-                            "z": item.size.z}
-        item_holder["weight"] = item.weight
-        item_holder["value"] = item.value
-        item_holder["icon"] = item.icon
-        item_holder["keywords"] = item.keywords
-        item_holder["category"] = item.category
-        item_holder["crafting_recipes"] = item.crafting_recipes
+        item_holder = item.serialize()
 
         # write to new file
-        with open(path + "/" + self.module_object_paths["items"] + "/" + item_holder["name"] + ".item", "W") as file:
-            json.dump(item_holder, file)
+        with open(f'{path}/{self.module_object_paths["items"]}/{item_holder["name"]}.item', "w") as file:
+            json.dump(item_holder, file, indent=4)
 
     def serialize_cells(self, cell: Cell, path: str):
         cell_holder = {}
@@ -37,12 +27,14 @@ class module_serializer:
         cell_path = self.module_object_paths["cells"]
         new_cell_name = cell_holder["name"]
         with open(f"{cell_path}/{path}/{new_cell_name}.cell", "W") as file:
-            json.dump(cell_holder, file)
+            json.dump(cell_holder, file, indent=4)
 
     def serialize_module(self, module_name: str, module_path: str) :
         new_paths = {"name": module_name}
         new_paths.update(self.module_object_paths)
 
-        os.makedirs(f"{module_path}/{module_name}")        
+        os.makedirs(f"{module_path}/{module_name}")
+        for class_types in self.module_object_paths:
+            os.makedirs(f"{module_path}/{module_name}/{class_types}")
         with open(f"{module_path}/{module_name}/{module_name}.module", "w") as file:
             json.dump(new_paths, file, indent=4)

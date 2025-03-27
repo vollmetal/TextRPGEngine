@@ -2,6 +2,7 @@ from src.module_utils import module_editor, module_loader
 from src.module_utils.module_editor import ModuleCreator
 from src.utils import engine_globals, menu_functions
 from src.utils import data_management
+from src.utils.user_input import handle_user_input
 
 MAIN_MENU_OPTIONS = {
     "1": menu_functions.new_game_menu,
@@ -16,28 +17,34 @@ def MainThread  ():
 
     module_editor_class = module_editor.new_module_editor()
 
+    user_input_prompt = f'Please enter the number corresponding to your chosen menu option: \n'
+    user_input_error = f'Please enter a valid menu item number. Valid menu item numbers are the numbers next to each menu item.'
+
+    user_module_prompt = f'Please select what module you would like to play: '
+
     engine_globals.init()
 
     engine_globals.engine_state = engine_globals.STATE_ENUMS[0]
-    print("Welcome to " 
-          + engine_globals.PROGRAM_NAME + ".")
-    print("Created by: " 
-          + engine_globals.CREATOR_NAME)
+    print(f"Welcome to {engine_globals.PROGRAM_NAME}.")
+    print(f"Created by: {engine_globals.CREATOR_NAME}")
     while engine_globals.engine_state != engine_globals.STATE_ENUMS[3]:
+
         if engine_globals.engine_state == engine_globals.STATE_ENUMS[0]: # Main menu
-            print(engine_globals.LINE_SEPERATOR_SMALL 
-                  + "MAIN MENU" 
-                  + engine_globals.LINE_SEPERATOR_SMALL)
-            print("1: New Game")
-            print("2: Options")
-            print("3: Exit")
+            print(f'{engine_globals.LINE_SEPERATOR_LARGE}\nMAIN MENU\n{engine_globals.LINE_SEPERATOR_LARGE}')
+
+            x = 0
+            for state in engine_globals.STATE_ENUMS:
+                if x == 0:
+                    x += 1
+                else:
+                    print(f'{x}: {state}')
+                    x += 1
             print(engine_globals.LINE_SEPERATOR_LARGE)
-            output = menu_functions.MenuSelection(
-                "To input a selection, enter the number associated with it:",
-                MAIN_MENU_OPTIONS,
-                )
-            if output == engine_globals.SELECTION_DEBUG[1]:
-                print("Please enter a valid option.")
+            output = handle_user_input(user_input_prompt, False, '', user_input_error)
+            if MAIN_MENU_OPTIONS.get(output) is not None:
+                MAIN_MENU_OPTIONS[output]()
+            else:
+                print(user_input_error)
             
         if engine_globals.engine_state == engine_globals.STATE_ENUMS[1]: # New game menu
             modules = []
@@ -60,7 +67,7 @@ def MainThread  ():
                   + ": Return to main menu")
             menu_items[str(module_index + 1)] = menu_functions.return_to_main_menu
             output = menu_functions.MenuSelection(
-                "Please select what module you would like to play: ",
+                user_module_prompt,
                 menu_items,
                 {"", ""}
             )
