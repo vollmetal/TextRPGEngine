@@ -1,9 +1,11 @@
 import json
 import os
 
-from ..utils.game_classes.world_functions.scene_branch import Scene
+from ..utils.game_classes import game_object
+from ..utils.game_classes.game_object import GameObject
+
+
 from ..utils.engine_classes import Vector3D
-from ..utils.game_classes.item import Item
 
 from .module import Module
 
@@ -40,27 +42,9 @@ def LoadModule(folder_path, module_name = ""):
         for item in item_file_list[0]:
             with open(f'{folder_path}/{loaded_module.name}/{MODULE_TYPES[0]}/{item}', 'r') as item_file:
                 item_data = json.load(item_file)
-                size = Vector3D(item_data['size']['x'], item_data['size']['y'], item_data['size']['z'])
-                new_item = Item(
-                    item_data['name'],
-                    size,
-                    item_data['weight'],
-                    item_data['value'],
-                    item_data['icon'],
-                    item_data['category'],
-                    item_data['keywords'],
-                    item_data['crafting_recipes']
-                )
-            loaded_module.items[new_item.name] = new_item
-        # load scenes
-        for scene in scene_file_list:
-            with open(f'{folder_path}/{module_name}/{MODULE_TYPES[0]}/{scene}') as scene_file:
-                scene_data = scene_file
-                new_scene = Scene(
-                    scene_data['name'],
-                    scene_data['description']
-                )
-            loaded_module.scenes[new_scene.name] = new_scene
+                new_object = game_object.deserialize(item_data)
+                loaded_module.module_objects[new_object.name] = new_object
+                
     return loaded_module
         
 def LoadModulesInDirectory(folder_path):

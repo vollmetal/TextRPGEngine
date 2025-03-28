@@ -1,13 +1,11 @@
 
+from ..utils.game_classes.game_object import GameObject
 from ..utils.user_input import handle_user_input
 from ..utils.engine_classes import Vector3D
-from ..module_utils.create_item_file import module_serializer
+from .serialize_object_funcs import module_serializer
 from .module import Module
 from .module_loader import LoadModule, LoadModulesInDirectory
-from ..utils import data_management, engine_globals
-from ..utils.game_classes.item import Item
-from ..utils.game_classes.world_functions.cell import Cell
-from ..utils.game_classes.world_functions.world import Worldspace
+from ..utils import engine_globals
 
 class ModuleCreator:
 
@@ -73,7 +71,7 @@ class ModuleCreator:
         else:
             if  len(self.module_container) > (int(user_input) - 1) :
                 self.current_menu_state = 'edit module'
-                self.current_selected_module = int(user_input)
+                self.current_selected_module = int(user_input) - 1
 
             else:
                 if (len(self.module_container)) == (int(user_input) - 1):
@@ -93,7 +91,6 @@ class ModuleCreator:
             "new worldspace",
             "main menu"
             ]
-        print(self.module_container[self.current_selected_module])
         print(f"{engine_globals.LINE_SEPERATOR_SMALL}\nSelect What to do With {self.module_container[self.current_selected_module].name}\n{engine_globals.LINE_SEPERATOR_SMALL}")
         x = 0
         for base_menu_input in edit_module_inputs:
@@ -107,57 +104,23 @@ class ModuleCreator:
     def new_item(self, selected_module: int):
         """handles the creation of new items"""
         process_position = 'name'
-        item_size = Vector3D(0, 0, 0)
+        name_input_message = f'Please input the name of the new object:\n'
         new_module_serializer = module_serializer(engine_globals.MODULE_STRUCTURE_PATH)
         while process_position != 'finished':
             match process_position:
                 case 'name':
-                    item_name = input('What do you want to call this item?')
-                    process_position = 'size'
-                case 'size':
-                    item_length = input('please enter the length of the item. Leave blank for 0.')
-                    if item_length != '':
-                        if item_length.isdigit():
-                            item_size.x = int(item_length)
-                        else:
-                            pass
-                    else:
-                        pass
-                    item_width = input('please enter the width of the item. Leave blank for 0.')
-                    if item_width != '':
-                        if item_width.isdigit():
-                            item_size.z = int(item_width)
-                        else:
-                            pass
-                    else:
-                        pass
-                    item_height = input('please enter the height of the item. Leave blank for 0.')
-                    if item_height != '':
-                        if item_height.isdigit():
-                            item_size.y = int(item_height)
-                        else:
-                            pass
-                    else:
-                        pass
-                    process_position = 'weight'
-                case 'weight':
-                    weight = input('please enter the weight of the item. Leave blank for 0.')
-                    if weight.isdigit() or (weight == ''):
-                        item_weight = weight
-                        process_position = 'value'
-                    else:
-                        print('please enter a valid weight or leave the input blank')
-                case 'value':
-                    value = input('please enter the value of the item. Leave blank for 0.')
-                    if value.isdigit() or value == '':
-                        item_value = weight
-                        process_position = 'finalization'
-                    else:
-                        print('please enter a valid value or leave the input blank')
+                    item_name = handle_user_input(name_input_message, False, '', self.input_int_error)
+                    print(item_name)
+                    process_position = 'finalization'
                 case "finalization":
                     try:
-                        new_item = Item(item_name, item_size, item_weight, item_value, '', '', [], {}, {})
-                        new_module_serializer.serialize_item(new_item, f'{engine_globals.MODULE_LOADER_PATH}/{self.module_container[self.current_selected_module].name}')
+                        item_path = engine_globals.MODULE_STRUCTURE_PATH['items']
+                        new_object = GameObject(item_name)
+                        print(new_object)
+                        print(f'path to check: {engine_globals.MODULE_LOADER_PATH}/{self.module_container[self.current_selected_module].name}/{item_path}/{new_object.name}')
+                        new_module_serializer.serialize_object(
+                            f'{engine_globals.MODULE_LOADER_PATH}/{self.module_container[self.current_selected_module].name}/{item_path}', 
+                                                               new_object)
                     except:
                         print('ERROR WRITING MODULE')
                     process_position = 'finished'
@@ -170,7 +133,7 @@ class ModuleCreator:
         item_list = []
         module: Module = self.module_container[self.current_selected_module]
         x = 1
-        for name, item in module.items.items():
+        for name, item in module.module_objects.items():
             item_list.append(item.name)
             print(f'{x}: {name}')
             x += 1
@@ -183,16 +146,16 @@ class ModuleCreator:
         if int(user_input) in edit_module_inputs.keys():
             self.current_menu_state = edit_module_inputs[int(user_input)]
         else:
-            if int(user_input) - 1 <= len(self.module_container[self.current_selected_module].items):
+            if int(user_input) - 1 <= len(self.module_container[self.current_selected_module].module_objects):
                 self.current_menu_state = 'edit item'
                 self.current_selected_items = item_list[int(user_input) - 1]
-                print(self.module_container[self.current_selected_module].items[self.current_selected_items])
+                print(self.module_container[self.current_selected_module].module_objects[self.current_selected_items])
             else:
                 print(self.input_int_error)
 
     def edit_item(self, selected_module: int):
-        print(f"{engine_globals.LINE_SEPERATOR_SMALL}\nEditing {self.module_container[self.current_selected_module].items[self.current_selected_items].name}\n{engine_globals.LINE_SEPERATOR_SMALL}")
-        print(f'{self.module_container[self.current_selected_module].items[self.current_selected_items]}')
+        print(f"{engine_globals.LINE_SEPERATOR_SMALL}\nEditing {self.module_container[self.current_selected_module].module_objects[self.current_selected_items].name}\n{engine_globals.LINE_SEPERATOR_SMALL}")
+        print(f'{self.module_container[self.current_selected_module].module_objects[self.current_selected_items]}')
         print(f'{engine_globals.LINE_SEPERATOR_LARGE}')
         self.current_menu_state = 'edit module'
 
@@ -240,9 +203,7 @@ class ModuleCreator:
         Format is: {name: menu function}"""
 
         self.module_container = [Module]
-        self.object_container = {"items": [Item],
-                                 "worldspace": [Worldspace],
-                                 "cells": [Cell]
+        self.object_container = {"items": [],
                                  }
 
         self.current_selected_module = -1

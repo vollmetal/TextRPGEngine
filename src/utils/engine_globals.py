@@ -17,15 +17,14 @@ SELECTION_DEBUG = (
 
 
 CLASS_TYPES = {
-    "Scene": utils.game_classes.world_functions.scene_branch.Scene,
-    "Item" : ""
+    'GameObject': ''
 }
 
 MODULE_LOADER_PATH = "./modules"
 
 MODULE_STRUCTURE_PATH = {
-    "items": "/Items",
-    "worlds": "/wWorlds",
+    "items": "/items",
+    "worlds": "/Worlds",
     "entities": "/Entities",
     "crafting_recipes": "/Crafting Recipes"
 }
