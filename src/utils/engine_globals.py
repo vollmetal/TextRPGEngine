@@ -24,9 +24,9 @@ MODULE_LOADER_PATH = "./modules"
 
 MODULE_STRUCTURE_PATH = {
     "items": "/items",
-    "worlds": "/Worlds",
+    "worlds": "/worlds",
     "entities": "/Entities",
-    "crafting_recipes": "/Crafting Recipes"
+    "scenes": "/scenes"
 }
 
 engine_state: str
