@@ -1,5 +1,5 @@
-from src.module_utils import module_editor, module_loader
-from src.module_utils.module_editor import ModuleCreator
+from src.utils.game_classes.module_utils import module_editor, module_loader
+from src.utils.game_classes.module_utils.module_editor import ModuleCreator
 from src.utils import engine_globals, menu_functions
 from src.utils import data_management
 from src.utils.user_input import handle_user_input
